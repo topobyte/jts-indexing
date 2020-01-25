@@ -19,8 +19,8 @@ package de.topobyte.jts.indexing;
 
 import java.util.Set;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 
 /**
  * @author Sebastian Kuerten (sebastian@topobyte.de)

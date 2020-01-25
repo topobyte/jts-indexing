@@ -20,9 +20,10 @@ package de.topobyte.jts.indexing;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+
 import com.infomatiq.jsi.Rectangle;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 
 import de.topobyte.jsi.GenericRTree;
 import de.topobyte.jsi.GenericSpatialIndex;
