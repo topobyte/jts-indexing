@@ -1,7 +1,7 @@
 # About
 
 This Java project provides various data structures for building
-geometric indexes for [JTS](https://github.com/dr-jts/jts) geometries.
+geometric indexes for [JTS](https://github.com/locationtech/jts) geometries.
 
 # License
 
