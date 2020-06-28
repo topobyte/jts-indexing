@@ -1,4 +1,4 @@
-// Copyright 2016 Sebastian Kuerten
+// Copyright 2020 Sebastian Kuerten
 //
 // This file is part of jts-indexing.
 //
@@ -17,20 +17,26 @@
 
 package de.topobyte.jts.indexing;
 
-/**
- * @author Sebastian Kuerten (sebastian@topobyte.de)
- */
-public class GeometryTesselationFactory
+public class Entry<S, T>
 {
 
-	public static GeometryTesselation createTesselation(
-			boolean usePreparedGeometries)
+	private S geometry;
+	private T thing;
+
+	public Entry(S geometry, T thing)
 	{
-		if (usePreparedGeometries) {
-			return new GeometryTesselationPreparedImpl();
-		} else {
-			return new GeometryTesselationSimpleImpl();
-		}
+		this.geometry = geometry;
+		this.thing = thing;
+	}
+
+	public S getGeometry()
+	{
+		return geometry;
+	}
+
+	public T getThing()
+	{
+		return thing;
 	}
 
 }

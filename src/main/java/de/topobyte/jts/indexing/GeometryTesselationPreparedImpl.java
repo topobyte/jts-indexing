@@ -22,6 +22,8 @@ import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 import com.infomatiq.jsi.Rectangle;
 
@@ -35,15 +37,15 @@ import de.topobyte.jsijts.JsiAndJts;
  * 
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
-public class SimpleGeometryTesselation implements GeometryTesselation
+public class GeometryTesselationPreparedImpl implements GeometryTesselation
 {
 
-	private GenericSpatialIndex<Geometry> gsi;
+	private GenericSpatialIndex<PreparedGeometry> gsi;
 
 	/**
 	 * Create an empty tesselation.
 	 */
-	public SimpleGeometryTesselation()
+	public GeometryTesselationPreparedImpl()
 	{
 		gsi = new GenericRTree<>(1, 10);
 	}
@@ -52,18 +54,19 @@ public class SimpleGeometryTesselation implements GeometryTesselation
 	public void add(Geometry geom)
 	{
 		Rectangle rect = JsiAndJts.toRectangle(geom);
-		gsi.add(rect, geom);
+		PreparedGeometry pg = PreparedGeometryFactory.prepare(geom);
+		gsi.add(rect, pg);
 	}
 
 	@Override
 	public Set<Geometry> test(Point point)
 	{
 		Rectangle r = JsiAndJts.toRectangle(point);
-		Set<Geometry> intersections = gsi.intersects(r);
+		Set<PreparedGeometry> intersections = gsi.intersects(r);
 		Set<Geometry> containing = new HashSet<>();
-		for (Geometry g : intersections) {
+		for (PreparedGeometry g : intersections) {
 			if (g.covers(point)) {
-				containing.add(g);
+				containing.add(g.getGeometry());
 			}
 		}
 		return containing;
@@ -73,11 +76,11 @@ public class SimpleGeometryTesselation implements GeometryTesselation
 	public Set<Geometry> testForIntersection(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<Geometry> intersections = gsi.intersects(r);
+		Set<PreparedGeometry> intersections = gsi.intersects(r);
 		Set<Geometry> hits = new HashSet<>();
-		for (Geometry g : intersections) {
+		for (PreparedGeometry g : intersections) {
 			if (g.intersects(geometry)) {
-				hits.add(g);
+				hits.add(g.getGeometry());
 			}
 		}
 		return hits;

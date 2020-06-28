@@ -1,4 +1,4 @@
-// Copyright 2016 Sebastian Kuerten
+// Copyright 2020 Sebastian Kuerten
 //
 // This file is part of jts-indexing.
 //
@@ -25,31 +25,27 @@ import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 /**
- * A more useful extension of {@link GeometryTesselation} that allows a value to
- * be mapped to each added geometry.
+ * A version of GeometryTesselationMap that also exposes the prepared geometries
+ * for further computation.
  * 
  * @param <T>
  *            the type of values to be associated to geometries.
  * 
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
-public class GeometryTesselationMap<T>
+public class PreparedGeometryTesselationMap<T>
 {
 
-	GeometryTesselation gt;
+	PreparedGeometryTesselationImpl gt;
 	Map<Geometry, T> geometryToThing = new HashMap<>();
 
-	public GeometryTesselationMap()
+	public PreparedGeometryTesselationMap()
 	{
-		this(false);
-	}
-
-	public GeometryTesselationMap(boolean usePreparedGeometries)
-	{
-		gt = GeometryTesselationFactory
-				.createTesselation(usePreparedGeometries);
+		gt = new PreparedGeometryTesselationImpl();
 	}
 
 	/**
@@ -64,8 +60,25 @@ public class GeometryTesselationMap<T>
 	 */
 	public void add(Geometry geom, T thing)
 	{
-		gt.add(geom);
+		PreparedGeometry pg = PreparedGeometryFactory.prepare(geom);
+		gt.add(pg);
 		geometryToThing.put(geom, thing);
+	}
+
+	/**
+	 * Add <code>geom</code> to the tesselation and map <code>thing</code> to
+	 * this geometry. Thus a test for a point covered by <code>geom</code> will
+	 * return a set containing <code>thing</code>.
+	 * 
+	 * @param geom
+	 *            the geometry to register <code>thing</code> for.
+	 * @param thing
+	 *            the value associated to <code>geom</code>.
+	 */
+	public void add(PreparedGeometry geom, T thing)
+	{
+		gt.add(geom);
+		geometryToThing.put(geom.getGeometry(), thing);
 	}
 
 	/**
@@ -76,12 +89,13 @@ public class GeometryTesselationMap<T>
 	 *            the point to test for.
 	 * @return all values that cover the point.
 	 */
-	public Set<Entry<Geometry, T>> test(Point point)
+	public Set<Entry<PreparedGeometry, T>> test(Point point)
 	{
-		Set<Geometry> test = gt.test(point);
-		Set<Entry<Geometry, T>> testSet = new HashSet<>();
-		for (Geometry g : test) {
-			testSet.add(new Entry<Geometry, T>(g, geometryToThing.get(g)));
+		Set<PreparedGeometry> test = gt.test(point);
+		Set<Entry<PreparedGeometry, T>> testSet = new HashSet<>();
+		for (PreparedGeometry g : test) {
+			testSet.add(new Entry<PreparedGeometry, T>(g,
+					geometryToThing.get(g.getGeometry())));
 		}
 		return testSet;
 	}
@@ -94,12 +108,14 @@ public class GeometryTesselationMap<T>
 	 *            the geometry to test for.
 	 * @return all values that intersect the geometry.
 	 */
-	public Set<Entry<Geometry, T>> testForIntersections(Geometry geometry)
+	public Set<Entry<PreparedGeometry, T>> testForIntersections(
+			Geometry geometry)
 	{
-		Set<Geometry> test = gt.testForIntersection(geometry);
-		Set<Entry<Geometry, T>> testSet = new HashSet<>();
-		for (Geometry g : test) {
-			testSet.add(new Entry<Geometry, T>(g, geometryToThing.get(g)));
+		Set<PreparedGeometry> test = gt.testForIntersection(geometry);
+		Set<Entry<PreparedGeometry, T>> testSet = new HashSet<>();
+		for (PreparedGeometry g : test) {
+			testSet.add(new Entry<PreparedGeometry, T>(g,
+					geometryToThing.get(g.getGeometry())));
 		}
 		return testSet;
 	}

@@ -1,4 +1,4 @@
-// Copyright 2016 Sebastian Kuerten
+// Copyright 2020 Sebastian Kuerten
 //
 // This file is part of jts-indexing.
 //
@@ -17,73 +17,44 @@
 
 package de.topobyte.jts.indexing;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
-import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
-
-import com.infomatiq.jsi.Rectangle;
-
-import de.topobyte.jsi.GenericRTree;
-import de.topobyte.jsi.GenericSpatialIndex;
-import de.topobyte.jsijts.JsiAndJts;
 
 /**
- * A collection of Geometries. They will be inserted into a spatial index so
- * that some tests may be performed efficiently.
- * 
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
-public class PreparedGeometryTesselation implements GeometryTesselation
+public interface PreparedGeometryTesselation
 {
 
-	private GenericSpatialIndex<PreparedGeometry> gsi;
+	/**
+	 * Add the specified geometry to the tesselation.
+	 * 
+	 * @param geom
+	 *            the geometry to add.
+	 */
+	public abstract void add(PreparedGeometry geom);
 
 	/**
-	 * Create an empty tesselation.
+	 * Retrieve the set of Geometries that this point is covered by.
+	 * 
+	 * @param point
+	 *            the point to test for.
+	 * @return the set of geometries this point is covered by.
 	 */
-	public PreparedGeometryTesselation()
-	{
-		gsi = new GenericRTree<>(1, 10);
-	}
+	public abstract Set<PreparedGeometry> test(Point point);
 
-	@Override
-	public void add(Geometry geom)
-	{
-		Rectangle rect = JsiAndJts.toRectangle(geom);
-		PreparedGeometry pg = PreparedGeometryFactory.prepare(geom);
-		gsi.add(rect, pg);
-	}
-
-	@Override
-	public Set<Geometry> test(Point point)
-	{
-		Rectangle r = JsiAndJts.toRectangle(point);
-		Set<PreparedGeometry> intersections = gsi.intersects(r);
-		Set<Geometry> containing = new HashSet<>();
-		for (PreparedGeometry g : intersections) {
-			if (g.covers(point)) {
-				containing.add(g.getGeometry());
-			}
-		}
-		return containing;
-	}
-
-	@Override
-	public Set<Geometry> testForIntersection(Geometry geometry)
-	{
-		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<PreparedGeometry> intersections = gsi.intersects(r);
-		Set<Geometry> hits = new HashSet<>();
-		for (PreparedGeometry g : intersections) {
-			if (g.intersects(geometry)) {
-				hits.add(g.getGeometry());
-			}
-		}
-		return hits;
-	}
+	/**
+	 * Return all geometries of this tesselation that intersect the given
+	 * testing geometry.
+	 * 
+	 * @param geometry
+	 *            the geometry to test for intersections with this tesselation.
+	 * @return all intersecting geometries
+	 */
+	public abstract Set<PreparedGeometry> testForIntersection(
+			Geometry geometry);
 
 }
