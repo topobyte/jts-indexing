@@ -37,7 +37,8 @@ import de.topobyte.jsijts.JsiAndJts;
  * 
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
-public class PreparedGeometryTesselation implements GeometryTesselation
+public class PreparedGeometryTesselation
+		implements GeometryTesselation<Geometry>
 {
 
 	private GenericSpatialIndex<PreparedGeometry> gsi;

@@ -25,7 +25,7 @@ import org.locationtech.jts.geom.Point;
 /**
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
-public interface GeometryTesselation
+public interface GeometryTesselation<T>
 {
 
 	/**
@@ -34,7 +34,7 @@ public interface GeometryTesselation
 	 * @param geom
 	 *            the geometry to add.
 	 */
-	public abstract void add(Geometry geom);
+	public abstract void add(T geom);
 
 	/**
 	 * Retrieve the set of Geometries that this point is covered by.
@@ -43,7 +43,7 @@ public interface GeometryTesselation
 	 *            the point to test for.
 	 * @return the set of geometries this point is covered by.
 	 */
-	public abstract Set<Geometry> test(Point point);
+	public abstract Set<T> test(Point point);
 
 	/**
 	 * Return all geometries of this tesselation that intersect the given
@@ -53,6 +53,6 @@ public interface GeometryTesselation
 	 *            the geometry to test for intersections with this tesselation.
 	 * @return all intersecting geometries
 	 */
-	public abstract Set<Geometry> testForIntersection(Geometry geometry);
+	public abstract Set<T> testForIntersection(Geometry geometry);
 
 }

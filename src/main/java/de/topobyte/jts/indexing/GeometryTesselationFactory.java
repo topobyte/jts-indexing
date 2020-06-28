@@ -17,13 +17,15 @@
 
 package de.topobyte.jts.indexing;
 
+import org.locationtech.jts.geom.Geometry;
+
 /**
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
 public class GeometryTesselationFactory
 {
 
-	public static GeometryTesselation createTesselation(
+	public static GeometryTesselation<Geometry> createTesselation(
 			boolean usePreparedGeometries)
 	{
 		if (usePreparedGeometries) {

@@ -35,33 +35,34 @@ import de.topobyte.jsijts.JsiAndJts;
  * 
  * @author Sebastian Kuerten (sebastian@topobyte.de)
  */
-public class SimpleGeometryTesselation implements GeometryTesselation<Geometry>
+public class OptionallyPreparedGeometryTesselation
+		implements GeometryTesselation<OptionallyPreparedGeometry>
 {
 
-	private GenericSpatialIndex<Geometry> gsi;
+	private GenericSpatialIndex<OptionallyPreparedGeometry> gsi;
 
 	/**
 	 * Create an empty tesselation.
 	 */
-	public SimpleGeometryTesselation()
+	public OptionallyPreparedGeometryTesselation()
 	{
 		gsi = new GenericRTree<>(1, 10);
 	}
 
 	@Override
-	public void add(Geometry geom)
+	public void add(OptionallyPreparedGeometry geom)
 	{
-		Rectangle rect = JsiAndJts.toRectangle(geom);
+		Rectangle rect = JsiAndJts.toRectangle(geom.getGeometry());
 		gsi.add(rect, geom);
 	}
 
 	@Override
-	public Set<Geometry> test(Point point)
+	public Set<OptionallyPreparedGeometry> test(Point point)
 	{
 		Rectangle r = JsiAndJts.toRectangle(point);
-		Set<Geometry> intersections = gsi.intersects(r);
-		Set<Geometry> containing = new HashSet<>();
-		for (Geometry g : intersections) {
+		Set<OptionallyPreparedGeometry> intersections = gsi.intersects(r);
+		Set<OptionallyPreparedGeometry> containing = new HashSet<>();
+		for (OptionallyPreparedGeometry g : intersections) {
 			if (g.covers(point)) {
 				containing.add(g);
 			}
@@ -70,12 +71,13 @@ public class SimpleGeometryTesselation implements GeometryTesselation<Geometry>
 	}
 
 	@Override
-	public Set<Geometry> testForIntersection(Geometry geometry)
+	public Set<OptionallyPreparedGeometry> testForIntersection(
+			Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<Geometry> intersections = gsi.intersects(r);
-		Set<Geometry> hits = new HashSet<>();
-		for (Geometry g : intersections) {
+		Set<OptionallyPreparedGeometry> intersections = gsi.intersects(r);
+		Set<OptionallyPreparedGeometry> hits = new HashSet<>();
+		for (OptionallyPreparedGeometry g : intersections) {
 			if (g.intersects(geometry)) {
 				hits.add(g);
 			}
