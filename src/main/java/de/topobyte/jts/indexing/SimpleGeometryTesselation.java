@@ -55,12 +55,12 @@ public class SimpleGeometryTesselation implements GeometryTesselation<Geometry>
 	}
 
 	@Override
-	public Set<Geometry> test(Geometry geometry)
+	public Set<Geometry> covering(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<Geometry> intersections = gsi.intersects(r);
+		Set<Geometry> candidates = gsi.intersects(r);
 		Set<Geometry> containing = new HashSet<>();
-		for (Geometry g : intersections) {
+		for (Geometry g : candidates) {
 			if (g.covers(geometry)) {
 				containing.add(g);
 			}
@@ -69,17 +69,17 @@ public class SimpleGeometryTesselation implements GeometryTesselation<Geometry>
 	}
 
 	@Override
-	public Set<Geometry> testForIntersection(Geometry geometry)
+	public Set<Geometry> intersecting(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<Geometry> intersections = gsi.intersects(r);
-		Set<Geometry> hits = new HashSet<>();
-		for (Geometry g : intersections) {
+		Set<Geometry> candidates = gsi.intersects(r);
+		Set<Geometry> intersecting = new HashSet<>();
+		for (Geometry g : candidates) {
 			if (g.intersects(geometry)) {
-				hits.add(g);
+				intersecting.add(g);
 			}
 		}
-		return hits;
+		return intersecting;
 	}
 
 }

@@ -134,9 +134,9 @@ public class GeometryTesselationMap<T>
 	 *            the geometry to test for.
 	 * @return all values that cover the geometry.
 	 */
-	public Set<Entry<T>> test(Geometry geometry)
+	public Set<Entry<T>> covering(Geometry geometry)
 	{
-		Set<OptionallyPreparedGeometry> test = gt.test(geometry);
+		Set<OptionallyPreparedGeometry> test = gt.covering(geometry);
 		Set<Entry<T>> testSet = new HashSet<>();
 		for (OptionallyPreparedGeometry g : test) {
 			testSet.add(geometryToThing.get(g.getGeometry()));
@@ -152,9 +152,9 @@ public class GeometryTesselationMap<T>
 	 *            the geometry to test for.
 	 * @return all values that intersect the geometry.
 	 */
-	public Set<Entry<T>> testForIntersections(Geometry geometry)
+	public Set<Entry<T>> intersecting(Geometry geometry)
 	{
-		Set<OptionallyPreparedGeometry> test = gt.testForIntersection(geometry);
+		Set<OptionallyPreparedGeometry> test = gt.intersecting(geometry);
 		Set<Entry<T>> testSet = new HashSet<>();
 		for (OptionallyPreparedGeometry g : test) {
 			testSet.add(geometryToThing.get(g.getGeometry()));

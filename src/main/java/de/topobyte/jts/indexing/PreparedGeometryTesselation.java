@@ -59,31 +59,31 @@ public class PreparedGeometryTesselation
 	}
 
 	@Override
-	public Set<Geometry> test(Geometry geometry)
+	public Set<Geometry> covering(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<PreparedGeometry> intersections = gsi.intersects(r);
-		Set<Geometry> containing = new HashSet<>();
-		for (PreparedGeometry g : intersections) {
+		Set<PreparedGeometry> candidates = gsi.intersects(r);
+		Set<Geometry> covering = new HashSet<>();
+		for (PreparedGeometry g : candidates) {
 			if (g.covers(geometry)) {
-				containing.add(g.getGeometry());
+				covering.add(g.getGeometry());
 			}
 		}
-		return containing;
+		return covering;
 	}
 
 	@Override
-	public Set<Geometry> testForIntersection(Geometry geometry)
+	public Set<Geometry> intersecting(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<PreparedGeometry> intersections = gsi.intersects(r);
-		Set<Geometry> hits = new HashSet<>();
-		for (PreparedGeometry g : intersections) {
+		Set<PreparedGeometry> candidates = gsi.intersects(r);
+		Set<Geometry> intersecting = new HashSet<>();
+		for (PreparedGeometry g : candidates) {
 			if (g.intersects(geometry)) {
-				hits.add(g.getGeometry());
+				intersecting.add(g.getGeometry());
 			}
 		}
-		return hits;
+		return intersecting;
 	}
 
 }

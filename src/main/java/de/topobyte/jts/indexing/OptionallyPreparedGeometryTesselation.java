@@ -56,32 +56,31 @@ public class OptionallyPreparedGeometryTesselation
 	}
 
 	@Override
-	public Set<OptionallyPreparedGeometry> test(Geometry geometry)
+	public Set<OptionallyPreparedGeometry> covering(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<OptionallyPreparedGeometry> intersections = gsi.intersects(r);
-		Set<OptionallyPreparedGeometry> containing = new HashSet<>();
-		for (OptionallyPreparedGeometry g : intersections) {
+		Set<OptionallyPreparedGeometry> candidates = gsi.intersects(r);
+		Set<OptionallyPreparedGeometry> covering = new HashSet<>();
+		for (OptionallyPreparedGeometry g : candidates) {
 			if (g.covers(geometry)) {
-				containing.add(g);
+				covering.add(g);
 			}
 		}
-		return containing;
+		return covering;
 	}
 
 	@Override
-	public Set<OptionallyPreparedGeometry> testForIntersection(
-			Geometry geometry)
+	public Set<OptionallyPreparedGeometry> intersecting(Geometry geometry)
 	{
 		Rectangle r = JsiAndJts.toRectangle(geometry);
-		Set<OptionallyPreparedGeometry> intersections = gsi.intersects(r);
-		Set<OptionallyPreparedGeometry> hits = new HashSet<>();
-		for (OptionallyPreparedGeometry g : intersections) {
+		Set<OptionallyPreparedGeometry> candidates = gsi.intersects(r);
+		Set<OptionallyPreparedGeometry> intersecting = new HashSet<>();
+		for (OptionallyPreparedGeometry g : candidates) {
 			if (g.intersects(geometry)) {
-				hits.add(g);
+				intersecting.add(g);
 			}
 		}
-		return hits;
+		return intersecting;
 	}
 
 }

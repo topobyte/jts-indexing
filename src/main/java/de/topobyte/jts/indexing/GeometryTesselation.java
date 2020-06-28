@@ -36,22 +36,23 @@ public interface GeometryTesselation<T>
 	public abstract void add(T geom);
 
 	/**
-	 * Retrieve the set of Geometries that this geometry is covered by.
+	 * Return all geometries of this tesselation that cover the given testing
+	 * geometry.
 	 * 
 	 * @param geometry
 	 *            the geometry to test for.
 	 * @return the set of geometries this geometry is covered by.
 	 */
-	public abstract Set<T> test(Geometry geometry);
+	public abstract Set<T> covering(Geometry geometry);
 
 	/**
 	 * Return all geometries of this tesselation that intersect the given
 	 * testing geometry.
 	 * 
 	 * @param geometry
-	 *            the geometry to test for intersections with this tesselation.
-	 * @return all intersecting geometries
+	 *            the geometry to test for.
+	 * @return the set of geometries this geometry intersects with.
 	 */
-	public abstract Set<T> testForIntersection(Geometry geometry);
+	public abstract Set<T> intersecting(Geometry geometry);
 
 }

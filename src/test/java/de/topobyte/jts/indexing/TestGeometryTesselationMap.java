@@ -22,7 +22,7 @@ public class TestGeometryTesselationMap
 		GeometryTesselationMap<String> map = new GeometryTesselationMap<>();
 		map.add(point, "foo");
 
-		Set<Entry<String>> test = map.test(point);
+		Set<Entry<String>> test = map.covering(point);
 		for (Entry<String> entry : test) {
 			String thing = entry.getThing();
 			OptionallyPreparedGeometry optionallyPrepared = entry.getGeometry();
