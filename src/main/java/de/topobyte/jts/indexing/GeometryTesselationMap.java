@@ -134,14 +134,50 @@ public class GeometryTesselationMap<T>
 	 *            the geometry to test for.
 	 * @return all values that cover the geometry.
 	 */
-	public Set<Entry<T>> covering(Geometry geometry)
+	public Set<T> covering(Geometry geometry)
 	{
 		Set<OptionallyPreparedGeometry> test = gt.covering(geometry);
-		Set<Entry<T>> testSet = new HashSet<>();
+		Set<T> results = new HashSet<>();
 		for (OptionallyPreparedGeometry g : test) {
-			testSet.add(geometryToThing.get(g.getGeometry()));
+			results.add(geometryToThing.get(g.getGeometry()).getThing());
 		}
-		return testSet;
+		return results;
+	}
+
+	/**
+	 * Return the set of value entries, whose associated geometries intersect
+	 * the given geometry.
+	 * 
+	 * @param geometry
+	 *            the geometry to test for.
+	 * @return all values that intersect the geometry.
+	 */
+	public Set<T> intersecting(Geometry geometry)
+	{
+		Set<OptionallyPreparedGeometry> test = gt.intersecting(geometry);
+		Set<T> results = new HashSet<>();
+		for (OptionallyPreparedGeometry g : test) {
+			results.add(geometryToThing.get(g.getGeometry()).getThing());
+		}
+		return results;
+	}
+
+	/**
+	 * Return the set of value entries, whose associated geometries cover the
+	 * given geometry.
+	 * 
+	 * @param geometry
+	 *            the geometry to test for.
+	 * @return all values that cover the geometry.
+	 */
+	public Set<Entry<T>> coveringEntries(Geometry geometry)
+	{
+		Set<OptionallyPreparedGeometry> test = gt.covering(geometry);
+		Set<Entry<T>> results = new HashSet<>();
+		for (OptionallyPreparedGeometry g : test) {
+			results.add(geometryToThing.get(g.getGeometry()));
+		}
+		return results;
 	}
 
 	/**
@@ -152,14 +188,14 @@ public class GeometryTesselationMap<T>
 	 *            the geometry to test for.
 	 * @return all values that intersect the geometry.
 	 */
-	public Set<Entry<T>> intersecting(Geometry geometry)
+	public Set<Entry<T>> intersectingEntries(Geometry geometry)
 	{
 		Set<OptionallyPreparedGeometry> test = gt.intersecting(geometry);
-		Set<Entry<T>> testSet = new HashSet<>();
+		Set<Entry<T>> results = new HashSet<>();
 		for (OptionallyPreparedGeometry g : test) {
-			testSet.add(geometryToThing.get(g.getGeometry()));
+			results.add(geometryToThing.get(g.getGeometry()));
 		}
-		return testSet;
+		return results;
 	}
 
 	/**
