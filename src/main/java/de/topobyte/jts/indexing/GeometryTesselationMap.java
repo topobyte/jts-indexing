@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
 
 /**
  * A more useful extension of {@link GeometryTesselation} that allows a value to
@@ -102,6 +103,28 @@ public class GeometryTesselationMap<T>
 
 		Entry<T> entry = new Entry<>(optionallyPrepared, thing);
 		geometryToThing.put(geom, entry);
+	}
+
+	/**
+	 * Add <code>geom</code> to the tesselation and map <code>thing</code> to
+	 * this geometry. Thus a test for a point covered by <code>geom</code> will
+	 * return a set containing <code>thing</code>.
+	 * 
+	 * @param prepared
+	 *            the geometry to register <code>thing</code> for.
+	 * @param thing
+	 *            the value associated to <code>geom</code>.
+	 */
+	public void add(PreparedGeometry prepared, T thing)
+	{
+		OptionallyPreparedGeometry optionallyPrepared = new OptionallyPreparedGeometry(
+				prepared);
+		gt.add(optionallyPrepared);
+
+		things.add(thing);
+
+		Entry<T> entry = new Entry<>(optionallyPrepared, thing);
+		geometryToThing.put(prepared.getGeometry(), entry);
 	}
 
 	/**
