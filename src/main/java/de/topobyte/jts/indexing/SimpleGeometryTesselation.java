@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 
 import com.infomatiq.jsi.Rectangle;
 
@@ -56,13 +55,13 @@ public class SimpleGeometryTesselation implements GeometryTesselation<Geometry>
 	}
 
 	@Override
-	public Set<Geometry> test(Point point)
+	public Set<Geometry> test(Geometry geometry)
 	{
-		Rectangle r = JsiAndJts.toRectangle(point);
+		Rectangle r = JsiAndJts.toRectangle(geometry);
 		Set<Geometry> intersections = gsi.intersects(r);
 		Set<Geometry> containing = new HashSet<>();
 		for (Geometry g : intersections) {
-			if (g.covers(point)) {
+			if (g.covers(geometry)) {
 				containing.add(g);
 			}
 		}

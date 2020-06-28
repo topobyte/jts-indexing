@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 
 /**
@@ -82,8 +81,8 @@ public class GeometryTesselationMap<T>
 
 	/**
 	 * Add <code>geom</code> to the tesselation and map <code>thing</code> to
-	 * this geometry. Thus a test for a point covered by <code>geom</code> will
-	 * return a set containing <code>thing</code>.
+	 * this geometry. Thus a test for a geometry covered by <code>geom</code>
+	 * will return a set containing <code>thing</code>.
 	 * 
 	 * @param geom
 	 *            the geometry to register <code>thing</code> for.
@@ -107,8 +106,8 @@ public class GeometryTesselationMap<T>
 
 	/**
 	 * Add <code>geom</code> to the tesselation and map <code>thing</code> to
-	 * this geometry. Thus a test for a point covered by <code>geom</code> will
-	 * return a set containing <code>thing</code>.
+	 * this geometry. Thus a test for a geometry covered by <code>geom</code>
+	 * will return a set containing <code>thing</code>.
 	 * 
 	 * @param prepared
 	 *            the geometry to register <code>thing</code> for.
@@ -129,15 +128,15 @@ public class GeometryTesselationMap<T>
 
 	/**
 	 * Return the set of values, whose associated geometries cover the given
-	 * point.
+	 * geometry.
 	 * 
-	 * @param point
-	 *            the point to test for.
-	 * @return all values that cover the point.
+	 * @param geometry
+	 *            the geometry to test for.
+	 * @return all values that cover the geometry.
 	 */
-	public Set<Entry<T>> test(Point point)
+	public Set<Entry<T>> test(Geometry geometry)
 	{
-		Set<OptionallyPreparedGeometry> test = gt.test(point);
+		Set<OptionallyPreparedGeometry> test = gt.test(geometry);
 		Set<Entry<T>> testSet = new HashSet<>();
 		for (OptionallyPreparedGeometry g : test) {
 			testSet.add(geometryToThing.get(g.getGeometry()));

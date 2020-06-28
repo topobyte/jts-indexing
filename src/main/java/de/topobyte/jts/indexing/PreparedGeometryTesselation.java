@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
@@ -60,13 +59,13 @@ public class PreparedGeometryTesselation
 	}
 
 	@Override
-	public Set<Geometry> test(Point point)
+	public Set<Geometry> test(Geometry geometry)
 	{
-		Rectangle r = JsiAndJts.toRectangle(point);
+		Rectangle r = JsiAndJts.toRectangle(geometry);
 		Set<PreparedGeometry> intersections = gsi.intersects(r);
 		Set<Geometry> containing = new HashSet<>();
 		for (PreparedGeometry g : intersections) {
-			if (g.covers(point)) {
+			if (g.covers(geometry)) {
 				containing.add(g.getGeometry());
 			}
 		}

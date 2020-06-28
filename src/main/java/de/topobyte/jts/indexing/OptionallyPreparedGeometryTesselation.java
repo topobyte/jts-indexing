@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 
 import com.infomatiq.jsi.Rectangle;
 
@@ -57,13 +56,13 @@ public class OptionallyPreparedGeometryTesselation
 	}
 
 	@Override
-	public Set<OptionallyPreparedGeometry> test(Point point)
+	public Set<OptionallyPreparedGeometry> test(Geometry geometry)
 	{
-		Rectangle r = JsiAndJts.toRectangle(point);
+		Rectangle r = JsiAndJts.toRectangle(geometry);
 		Set<OptionallyPreparedGeometry> intersections = gsi.intersects(r);
 		Set<OptionallyPreparedGeometry> containing = new HashSet<>();
 		for (OptionallyPreparedGeometry g : intersections) {
-			if (g.covers(point)) {
+			if (g.covers(geometry)) {
 				containing.add(g);
 			}
 		}
