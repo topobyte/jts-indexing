@@ -199,6 +199,15 @@ public class GeometryTesselationMap<T>
 	}
 
 	/**
+	 * @return a collection of all entries that have been added to this
+	 *         tesselation.
+	 */
+	public Collection<Entry<T>> entries()
+	{
+		return Collections.unmodifiableCollection(geometryToThing.values());
+	}
+
+	/**
 	 * @return a collection of all elements that have been added to this
 	 *         tesselation.
 	 */
