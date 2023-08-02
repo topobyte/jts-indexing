@@ -1,10 +1,10 @@
 wrapper {
-    gradleVersion = '5.2.1'
+    gradleVersion = '7.6.1'
 }
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'eclipse'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = pGroup
 version = pVersion
@@ -16,10 +16,10 @@ if (project.hasProperty("topobyte")) {
 
 repositories {
     maven {
-        url 'http://mvn.topobyte.de'
+        url 'https://mvn.topobyte.de'
     }
     maven {
-        url 'http://mvn.slimjars.com'
+        url 'https://mvn.slimjars.com'
     }
     mavenCentral()
 }
@@ -28,34 +28,28 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile 'de.topobyte:jsi:1.2.0'
-    compile 'de.topobyte:jsi-and-jts:0.2.1'
-    compile 'org.locationtech.jts:jts-core:1.16.1'
+    api 'de.topobyte:jsi:1.2.0'
+    api 'de.topobyte:jsi-and-jts:0.2.1'
+    api 'org.locationtech.jts:jts-core:1.16.1'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.slf4j:slf4j-simple:1.6.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.slf4j:slf4j-simple:1.6.1'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
 
-artifacts {
-    archives sourcesJar
-}
+def pomInfo = new XmlSlurper().parse(file('info.pom'));
 
-def pomInfo = new XmlSlurper().parse(new File('info.pom'));
-
-afterEvaluate { project ->
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                pom.project {
-                    name pomInfo.name
-                    description pomInfo.description
-                    url pomInfo.url
-                }
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            pom {
+                name = "$pomInfo.name"
+                description = "$pomInfo.description"
+                url = "$pomInfo.url"
             }
         }
     }
